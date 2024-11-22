@@ -1,0 +1,16 @@
+lib/data/coco/train2017
+lib/data/coco/val2017
+lib/configs
+lib/work_dirs/*
+lib/wandb
+
+!lib/configs/top_down/lite_hrnet/coco
+!lib/configs/top_down/detection/
+!lib/work_dirs/.gitkeep
+
+demo/result/*
+demo/*.jpg
+demo/*.gif
+
+
+*.json
