@@ -6,6 +6,8 @@ import json
 import time
 from datetime import datetime
 
+import argparse
+
 sys.path.append("..")
 from utils.data_form import Form
 
@@ -136,7 +138,10 @@ class Play():
         
 
 if __name__ == '__main__':
-    
+    parser = argparse.ArgumentParser(description='demo for pose detection')
+    parser.add_argument('video_path', help='video path')
+    args = parser.parse_args()
+
     # Detction
     DET_CONFIG_FASTER_R_CNN_R50_FPN_COCO = "../lib/configs/detection/faster_rcnn_r50_fpn_coco.py"
     DET_CHECKPOINT_FASTER_R_CNN_R50_FPN_COCO = "https://huggingface.co/spaces/fffiloni/mmpose-estimation/resolve/dd314fcab24437b8d2847cda867fcd46036ec91f/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth"
