@@ -150,7 +150,7 @@ if __name__ == '__main__':
     POSE_CONFIG_HRNET_W48_COCO_256X192 = "../lib/configs/top_down/lite_hrnet/coco/litehrnet_30_coco_256x192.py"
     POSE_CHECKPOINT_HRNET_W48_COCO_256X192 = "../lib/work_dirs/litehrnet_30_coco_256x192/latest.pth"
 
-    VIDEO_1 = '/home/morish/ダウンロード/nturgb+d_rgb/S001C001P001R001A001_rgb.avi'
+    VIDEO_1 = args.video_path
 
     play= Play()
     play.det__init__(DET_CONFIG_FASTER_R_CNN_R50_FPN_COCO, DET_CHECKPOINT_FASTER_R_CNN_R50_FPN_COCO)
