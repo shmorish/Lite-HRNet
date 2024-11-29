@@ -52,8 +52,7 @@ class Play():
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         size = (width, height)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_filename = os.path.join(outpath, f'Result_{timestamp}_{os.path.basename(user_video)}')
+        output_filename = os.path.join(outpath, f'Result_{os.path.basename(user_video)}')
 
 
         print(f"Output filename: {output_filename}")
@@ -101,13 +100,26 @@ class Play():
             posedet_time = posedet_time + (end_time - start_time)
             start_time = end_time
 
-
-            bounding_Box = pose_results[0]["bbox"]
+            try:
+                bounding_Box = pose_results[0]["bbox"]
+            except:
+                print("No person detected")
+                continue
             result_dict={}
             for i, p_point in enumerate(pose_results[0]["keypoints"]):
                 result_dict_1 = Form.data_form(dict=result_dict, i = i, keypoint = p_point)
             data_1 = Form.make_dic(idx, bounding_Box, result_dict_1)
             RESULT_BOX[idx] = (data_1)
+
+            try:
+                bounding_Box = pose_results[1]["bbox"]
+                for i, p_point in enumerate(pose_results[1]["keypoints"]):
+                    result_dict_2 = Form.data_form(dict=result_dict, i = i, keypoint = p_point)
+                data_2 = Form.make_dic(idx, bounding_Box, result_dict_2)
+                RESULT_BOX[idx] = (data_1, data_2)
+            except:
+                print("No second person detected")
+            # print(pose_results[1])
 
             # show the results
             vis_img = vis_pose_result(
