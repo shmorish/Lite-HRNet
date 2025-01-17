@@ -103,7 +103,7 @@ class Play():
             try:
                 bounding_Box = pose_results[0]["bbox"]
             except:
-                print("No person detected")
+                # print("No person detected")
                 continue
             result_dict={}
             for i, p_point in enumerate(pose_results[0]["keypoints"]):
@@ -118,7 +118,8 @@ class Play():
                 data_2 = Form.make_dic(idx, bounding_Box, result_dict_2)
                 RESULT_BOX[idx] = (data_1, data_2)
             except:
-                print("No second person detected")
+                # print("No second person detected")
+                pass
             # print(pose_results[1])
 
             # show the results
@@ -137,13 +138,13 @@ class Play():
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                break
-            print("finish write frame:", idx)
+            # print("finish write frame:", idx)
             
         cap.release()
         videoWriter.release()
         cv2.destroyAllWindows()
-        print("person detect:", mmdet_time / idx)
-        print("pose detect:", posedet_time / idx)
+        # print("person detect:", mmdet_time / idx)
+        # print("pose detect:", posedet_time / idx)
 
         with open("./result/{}.json".format(os.path.basename(user_video)), "w") as outfile:
             json.dump(RESULT_BOX, outfile, indent=4)
@@ -156,7 +157,7 @@ if __name__ == '__main__':
 
     # Detction
     DET_CONFIG_FASTER_R_CNN_R50_FPN_COCO = "../lib/configs/detection/faster_rcnn_r50_fpn_coco.py"
-    # DET_CHECKPOINT_FASTER_R_CNN_R50_FPN_COCO = "https://huggingface.co/spaces/fffiloni/mmpose-estimation/resolve/dd314fcab24437b8d2847cda867fcd46036ec91f/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth"
+    DET_CHECKPOINT_FASTER_R_CNN_R50_FPN_COCO = "https://huggingface.co/spaces/fffiloni/mmpose-estimation/resolve/dd314fcab24437b8d2847cda867fcd46036ec91f/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth"
     # DET_CHECKPOINT_FASTER_R_CNN_R50_FPN_COCO = "/home/morish/Lite-HRNet/lib/work_dirs/faster_rcnn_r50_fpn_1x_coco/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth"
     
     # Pose

@@ -6,11 +6,14 @@ infer_file_name=infer.py
 source ~/anaconda3/etc/profile.d/conda.sh
 conda activate hrnet
 
+BLUE='\033[0;34m'
+NC='\033[0m'
+
 video_path="/home/morish/nturgbd_rgb_dataset/"
 result_path="/home/morish/Lite-HRNet/demo/result/"
 
-# webhook_url="https://discord.com/api/webhooks/1311956163373301812/KpHo7xPGku2yn9-wLLR4KtKs96Iipbqz3aM_WiXhsm57d9euhGjKJkRUy6xzGlz-pwMF"
-webhook_url="https://discord.com/api/webhooks/1311956421885296713/NJxNixoPBjekqN8q7lgO8U3K9JjEhSX0v7WqxxVYvo5KjEkRDfN2O2W0UZetSiPqKJ9o"
+webhook_url="https://discord.com/api/webhooks/1311956163373301812/KpHo7xPGku2yn9-wLLR4KtKs96Iipbqz3aM_WiXhsm57d9euhGjKJkRUy6xzGlz-pwMF"
+# webhook_url="https://discord.com/api/webhooks/1311956421885296713/NJxNixoPBjekqN8q7lgO8U3K9JjEhSX0v7WqxxVYvo5KjEkRDfN2O2W0UZetSiPqKJ9o"
 
 file_num=`ls ${video_path} | wc -l`
 current_inference_count=`ls ${result_path} | grep json | wc -l`
@@ -33,14 +36,24 @@ function signal_handler() {
 }
 trap signal_handler 2
 
+max_jobs=4
+job_count=0
+
 for file in $(ls ${video_path}); do
     if [ -e ${result_path}${file}.json ]; then
         echo "${file}.json is already exist."
         continue
     fi
     echo ${video_path}${file}
-    python3 ${infer_file_name} ${video_path}${file}
-    current_inference_count=`ls ${result_path} | grep *.json | wc -l`
+    python3 ${infer_file_name} ${video_path}${file} &
+    job_count=$((job_count+1))
+    if [ ${job_count} -ge ${max_jobs} ]; then
+        wait -n
+        job_count=$((job_count-1))
+    fi
+    current_inference_count=`ls ${result_path} | grep .json | wc -l`
+    percent=$((current_inference_count*100/file_num))
+    echo -e "${BLUE}current_inference_count: ${current_inference_count}/${file_num} (${percent}%)\n${NC}"
 done
  
 eval ${success_curl}
